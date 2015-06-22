@@ -71,7 +71,6 @@ install:	$(ALL)
 	install -m 0644 *.1              $(PREFIX)/usr/man/man1
 	install -m 0755 -d               $(PREFIX)/usr/man/man3
 	install -m 0644 *.3              $(PREFIX)/usr/man/man3
-	ldconfig
 
 uninstall:
 	rm -f $(PREFIX)/usr/include/pigpio.h
@@ -83,7 +82,6 @@ uninstall:
 	rm -f $(PREFIX)/usr/bin/pigs
 	rm -f $(PREFIX)/usr/man/man1/pig*.1
 	rm -f $(PREFIX)/usr/man/man3/pig*.3
-	ldconfig
 
 $(LIB1):	$(OBJ1)
 	$(SHLIB) -o $(LIB1) $(OBJ1)
