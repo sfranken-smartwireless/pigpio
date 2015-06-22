@@ -13,19 +13,18 @@ IN THAT DIRECTORY
 Enter the following two commands (in this order)
 
 make
-make install
+sudo make install
 
 This will install
 
-o the library (libpigpio.so) in /usr/local/lib
-o the library (libpigpiod_if.so) in /usr/local/lib
-o the header file (pigpio.h) in /usr/local/include
-o the header file (pigpiod_if.h) in /usr/local/include
-o the daemon (pigpiod) in /usr/local/bin
-o the socket interface (pigs) in /usr/local/bin
-o the utility pig2vcd in /usr/local/bin
-o man pages in /usr/local/man/man1 and man3
-o the Python module pigpio.py for Python 2 and 3
+o the library (libpigpio.so) in /usr/lib
+o the library (libpigpiod_if.so) in /usr/lib
+o the header file (pigpio.h) in /usr/include
+o the header file (pigpiod_if.h) in /usr/include
+o the daemon (pigpiod) in /usr/bin
+o the socket interface (pigs) in /usr/bin
+o the utility pig2vcd in /usr/bin
+o man pages in /usr/man/man1 and man3
 
 TEST (optional)
 
