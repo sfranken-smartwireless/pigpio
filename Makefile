@@ -16,11 +16,15 @@ OBJ2     = pigpiod_if.o command.o
 
 LIB      = $(LIB1) $(LIB2)
 
-ALL     = $(LIB) x_pigpio x_pigpiod_if pig2vcd pigpiod pigs
+ALL      = $(LIB) x_pigpio x_pigpiod_if pig2vcd pigpiod pigs
 
 LL1      = -L. -lpigpio -lpthread -lrt
 
 LL2      = -L. -lpigpiod_if -lpthread -lrt
+
+ifndef PREFIX
+PREFIX   = ""
+endif
 
 all:	$(ALL)
 
@@ -52,42 +56,34 @@ clean:
 	rm -f *.o *.i *.s *~ $(ALL)
 
 install:	$(ALL)
-	sudo install -m 0755 -d               /opt/pigpio/cgi
-	sudo install -m 0755 -d               /usr/local/include
-	sudo install -m 0644 pigpio.h         /usr/local/include
-	sudo install -m 0644 pigpiod_if.h     /usr/local/include
-	sudo install -m 0755 -d               /usr/local/lib
-	sudo install -m 0755 libpigpio.so     /usr/local/lib
-	sudo install -m 0755 libpigpiod_if.so /usr/local/lib
-	sudo install -m 0755 -d               /usr/local/bin
-	sudo install -m 0755 -s pig2vcd       /usr/local/bin
-	sudo install -m 0755 -s pigpiod       /usr/local/bin
-	sudo install -m 0755 -s pigs          /usr/local/bin
-	sudo python2 setup.py install
-	sudo python3 setup.py install
-	sudo install -m 0755 -d               /usr/local/man/man1
-	sudo install -m 0644 *.1              /usr/local/man/man1
-	sudo install -m 0755 -d               /usr/local/man/man3
-	sudo install -m 0644 *.3              /usr/local/man/man3
-	sudo ldconfig
+	install -m 0755 -d               $(PREFIX)/opt/pigpio/cgi
+	install -m 0755 -d               $(PREFIX)/usr/include
+	install -m 0644 pigpio.h         $(PREFIX)/usr/include
+	install -m 0644 pigpiod_if.h     $(PREFIX)/usr/include
+	install -m 0755 -d               $(PREFIX)/usr/lib
+	install -m 0755 libpigpio.so     $(PREFIX)/usr/lib
+	install -m 0755 libpigpiod_if.so $(PREFIX)/usr/lib
+	install -m 0755 -d               $(PREFIX)/usr/bin
+	install -m 0755 -s pig2vcd       $(PREFIX)/usr/bin
+	install -m 0755 -s pigpiod       $(PREFIX)/usr/bin
+	install -m 0755 -s pigs          $(PREFIX)/usr/bin
+	install -m 0755 -d               $(PREFIX)/usr/man/man1
+	install -m 0644 *.1              $(PREFIX)/usr/man/man1
+	install -m 0755 -d               $(PREFIX)/usr/man/man3
+	install -m 0644 *.3              $(PREFIX)/usr/man/man3
+	ldconfig
 
 uninstall:
-	sudo rm -f /usr/local/include/pigpio.h
-	sudo rm -f /usr/local/include/pigpiod_if.h
-	sudo rm -f /usr/local/lib/libpigpio.so
-	sudo rm -f /usr/local/lib/libpigpiod_if.so
-	sudo rm -f /usr/local/bin/pig2vcd
-	sudo rm -f /usr/local/bin/pigpiod
-	sudo rm -f /usr/local/bin/pigs
-	echo removing python2 files
-	sudo python2 setup.py install --record /tmp/pigpio >/dev/null
-	sudo xargs rm -f < /tmp/pigpio >/dev/null
-	echo removing python3 files
-	sudo python3 setup.py install --record /tmp/pigpio >/dev/null
-	sudo xargs rm -f < /tmp/pigpio >/dev/null
-	sudo rm -f /usr/local/man/man1/pig*.1
-	sudo rm -f /usr/local/man/man3/pig*.3
-	sudo ldconfig
+	rm -f $(PREFIX)/usr/include/pigpio.h
+	rm -f $(PREFIX)/usr/include/pigpiod_if.h
+	rm -f $(PREFIX)/usr/lib/libpigpio.so
+	rm -f $(PREFIX)/usr/lib/libpigpiod_if.so
+	rm -f $(PREFIX)/usr/bin/pig2vcd
+	rm -f $(PREFIX)/usr/bin/pigpiod
+	rm -f $(PREFIX)/usr/bin/pigs
+	rm -f $(PREFIX)/usr/man/man1/pig*.1
+	rm -f $(PREFIX)/usr/man/man3/pig*.3
+	ldconfig
 
 $(LIB1):	$(OBJ1)
 	$(SHLIB) -o $(LIB1) $(OBJ1)
