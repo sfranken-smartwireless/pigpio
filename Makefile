@@ -1,10 +1,14 @@
 #
-CC       = gcc
-AR       = ar
-RANLIB   = ranlib
-SIZE     = size
-SHLIB    = gcc -shared
-STRIPLIB = strip --strip-unneeded
+ifndef CROSS_COMPILE
+CROSS_COMPILE   = ""
+endif
+
+CC       = $(CROSS_COMPILE)gcc
+AR       = $(CROSS_COMPILE)ar
+RANLIB   = $(CROSS_COMPILE)ranlib
+SIZE     = $(CROSS_COMPILE)size
+SHLIB    = $(CROSS_COMPILE)gcc -shared
+STRIPLIB = $(CROSS_COMPILE)strip --strip-unneeded
 
 CFLAGS	+= -O3 -Wall
 
