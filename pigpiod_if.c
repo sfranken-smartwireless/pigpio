@@ -208,7 +208,7 @@ static int pigpioOpenSocket(char *addr, char *port)
       opt = 1;
       setsockopt(sock, IPPROTO_TCP, TCP_NODELAY, (char*)&opt, sizeof(int));
 
-      if (bind(sock, rp->ai_addr, rp->ai_addrlen) != -1) break;
+      if (connect(sock, rp->ai_addr, rp->ai_addrlen) != -1) break;
    }
 
    freeaddrinfo(res);
