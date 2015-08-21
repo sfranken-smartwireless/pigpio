@@ -220,7 +220,7 @@ static int pigpioOpenSocket(char *addr, char *port)
 
 static void dispatch_notification(gpioReport_t *r)
 {
-   static uint32_t lastLevel = 0;
+   static uint32_t lastLevel = -1;
 
    callback_t *p;
    uint32_t changed;
@@ -233,7 +233,7 @@ static void dispatch_notification(gpioReport_t *r)
 
    if (r->flags == 0)
    {
-      changed = (r->level ^ lastLevel) & gNotifyBits;
+      changed = (lastLevel == -1)? gNotifyBits : (r->level ^ lastLevel) & gNotifyBits;
 
       lastLevel = r->level;
 
@@ -296,7 +296,7 @@ static void *pthNotifyThread(void *x)
       }
 
       /* copy any partial report to start of array */
-      
+
       if (got && r) gReport[0] = gReport[r];
    }
    return 0;
@@ -639,7 +639,7 @@ int hardware_clock(unsigned gpio, unsigned frequency)
 int hardware_PWM(unsigned gpio, unsigned frequency, uint32_t dutycycle)
 {
    gpioExtent_t ext[1];
-   
+
    /*
    p1=gpio
    p2=frequency
@@ -673,7 +673,7 @@ int wave_add_new(void)
 int wave_add_generic(unsigned numPulses, gpioPulse_t *pulses)
 {
    gpioExtent_t ext[1];
-   
+
    /*
    p1=0
    p2=0
@@ -798,7 +798,7 @@ int wave_get_max_cbs(void)
 int gpio_trigger(unsigned user_gpio, unsigned pulseLen, uint32_t level)
 {
    gpioExtent_t ext[1];
-   
+
    /*
    p1=user_gpio
    p2=pulseLen
@@ -906,7 +906,7 @@ int delete_script(unsigned script_id)
 int bb_serial_read_open(unsigned user_gpio, unsigned baud, uint32_t bbBits)
 {
    gpioExtent_t ext[1];
-   
+
    /*
    p1=user_gpio
    p2=baud
@@ -1536,4 +1536,3 @@ int wait_for_edge(unsigned user_gpio, unsigned edge, double timeout)
 
    return triggered;
 }
-
