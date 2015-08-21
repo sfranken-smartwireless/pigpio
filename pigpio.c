@@ -7074,8 +7074,15 @@ int initInitialise(void)
       if (portStr) port = atoi(portStr); else port = gpioCfg.socketPort;
 
       server.sin_family = AF_INET;
-      server.sin_addr.s_addr = INADDR_ANY;
       server.sin_port = htons(port);
+
+      if(getenv(PI_ENVADDR) == NULL)
+         server.sin_addr.s_addr = INADDR_ANY;
+      else
+      {
+         if(inet_pton(AF_INET, getenv(PI_ENVADDR), &(server.sin_addr)) != 1)
+            SOFT_ERROR(PI_INIT_FAILED, "Invalid address %s (%m)", getenv(PI_ENVADDR));
+      }
 
       if (bind(fdSock,(struct sockaddr *)&server , sizeof(server)) < 0)
          SOFT_ERROR(PI_INIT_FAILED, "bind to port %d failed (%m)", port);
@@ -10818,4 +10825,3 @@ int gpioCfgInternals(unsigned cfgWhat, int cfgVal)
 /* include any user customisations */
 
 #include "custom.cext"
-
