@@ -8,7 +8,8 @@ AR       = $(CROSS_COMPILE)ar
 RANLIB   = $(CROSS_COMPILE)ranlib
 SIZE     = $(CROSS_COMPILE)size
 SHLIB    = $(CROSS_COMPILE)gcc -shared
-STRIPLIB = $(CROSS_COMPILE)strip --strip-unneeded
+STRIP	 = $(CROSS_COMPILE)strip
+STRIPLIB = $(STRIP) --strip-unneeded
 
 CFLAGS	+= -O3 -Wall
 
@@ -68,9 +69,9 @@ install:	$(ALL)
 	install -m 0755 libpigpio.so     $(PREFIX)/usr/lib
 	install -m 0755 libpigpiod_if.so $(PREFIX)/usr/lib
 	install -m 0755 -d               $(PREFIX)/usr/bin
-	install -m 0755 -s pig2vcd       $(PREFIX)/usr/bin
-	install -m 0755 -s pigpiod       $(PREFIX)/usr/bin
-	install -m 0755 -s pigs          $(PREFIX)/usr/bin
+	install -m 0755 -s --strip-program=$(STRIP) pig2vcd       $(PREFIX)/usr/bin
+	install -m 0755 -s --strip-program=$(STRIP) pigpiod       $(PREFIX)/usr/bin
+	install -m 0755 -s --strip-program=$(STRIP) pigs          $(PREFIX)/usr/bin
 	install -m 0755 -d               $(PREFIX)/usr/man/man1
 	install -m 0644 *.1              $(PREFIX)/usr/man/man1
 	install -m 0755 -d               $(PREFIX)/usr/man/man3
