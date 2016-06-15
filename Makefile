@@ -88,13 +88,13 @@ install:	$(ALL)
 	install -m 0755 -s --strip-program=$(STRIP) pig2vcd        $(DESTDIR)$(bindir)
 	install -m 0755 -s --strip-program=$(STRIP) pigpiod        $(DESTDIR)$(bindir)
 	install -m 0755 -s --strip-program=$(STRIP) pigs           $(DESTDIR)$(bindir)
-	if which python2; then python2 setup.py install; fi
-	if which python3; then python3 setup.py install; fi
+	if [ -z "$CROSS_COMPILE" ] && which python2; then python2 setup.py install; fi
+	if [ -z "$CROSS_COMPILE" ] && which python3; then python3 setup.py install; fi
 	install -m 0755 -d                $(DESTDIR)$(mandir)/man1
 	install -m 0644 *.1               $(DESTDIR)$(mandir)/man1
 	install -m 0755 -d                $(DESTDIR)$(mandir)/man3
 	install -m 0644 *.3               $(DESTDIR)$(mandir)/man3
-	ldconfig
+	if [ -z "$CROSS_COMPILE" ]; then ldconfig; fi
 
 uninstall:
 	rm -f $(DESTDIR)$(includedir)/pigpio.h
@@ -106,8 +106,8 @@ uninstall:
 	rm -f $(DESTDIR)$(bindir)/pig2vcd
 	rm -f $(DESTDIR)$(bindir)/pigpiod
 	rm -f $(DESTDIR)$(bindir)/pigs
-	if which python2; then python2 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
-	if which python3; then python3 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
+	if [ -z "$CROSS_COMPILE" ] && which python2; then python2 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
+	if [ -z "$CROSS_COMPILE" ] && which python3; then python3 setup.py install --record /tmp/pigpio >/dev/null; xargs rm -f < /tmp/pigpio >/dev/null; fi
 	rm -f $(DESTDIR)$(mandir)/man1/pig*.1
 	rm -f $(DESTDIR)$(mandir)/man3/pig*.3
 	ldconfig
